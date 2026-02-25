@@ -13,6 +13,16 @@ export const authOptions = {
         }
       }
     }),
+    
    
   ],
+  callbacks:{
+    async signIn({profile}){
+        return true;
+    },
+    async session({session}){
+        return session;
+    }
+
+  }
 };
