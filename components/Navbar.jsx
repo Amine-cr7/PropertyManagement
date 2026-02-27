@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import logo from "@/assets/images/logo-white.png";
 import profileDefault from "@/assets/images/profile.png";
@@ -8,11 +8,39 @@ import { FaGoogle } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 export default function Navbar() {
-  const { data: session } = useSession();
-  console.log(session)
+  const { data: session,status } = useSession();
+  
+  
+  const profileImage = session?.user?.image;
   const [isMobileOpenMenu, setIsMobileOpenMenu] = useState(false);
   const [isProfileOpenMenu, setIsProfileOpenMenu] = useState(false);
+  const [providers, setProviders] = useState(null);
   const pathName = usePathname();
+
+  useEffect(() => {
+    const setAuthProviders = async () => {
+      const providers = await getProviders();
+      setProviders(providers);
+    };
+    setAuthProviders();
+  }, []);
+
+  const profileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(e.target)
+      ) {
+        setIsProfileOpenMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  
 
   return (
     <nav className="bg-blue-700 border-b border-blue-500">
@@ -84,19 +112,26 @@ export default function Navbar() {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-          {!session && (
+          {status !== 'loading' && !session  && (
             <div className="hidden md:block md:ml-6">
               <div className="flex items-center">
-                <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
-                  <FaGoogle className="text-white mr-2" />
-                  <span>Login or Register</span>
-                </button>
+                {providers &&
+                  Object.values(providers).map((provider, index) => (
+                    <button
+                      key={index}
+                      onClick={() => signIn(provider.id)}
+                      className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
+                    >
+                      <FaGoogle className="text-white mr-2" />
+                      <span>Login or Register</span>
+                    </button>
+                  ))}
               </div>
             </div>
           )}
 
           {/* <!-- Right Side Menu (Logged In) --> */}
-          {session && (
+          {status !== 'loading' &&  session && (
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
               <Link href="/messages" className="relative group">
                 <button
@@ -126,7 +161,7 @@ export default function Navbar() {
                 </span>
               </Link>
               {/* <!-- Profile dropdown button --> */}
-              <div className="relative ml-3">
+              <div ref={profileMenuRef} className="relative ml-3">
                 <div>
                   <button
                     type="button"
@@ -140,7 +175,9 @@ export default function Navbar() {
                     <span className="sr-only">Open user menu</span>
                     <Image
                       className="h-8 w-8 rounded-full"
-                      src={profileDefault}
+                      src={profileImage || profileDefault}
+                      width={40}
+                      height={40}
                       alt=""
                     />
                   </button>
@@ -179,6 +216,10 @@ export default function Navbar() {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
+                      onClick={() => {
+                        setIsProfileOpenMenu(false);
+                        signOut();
+                      }}
                     >
                       Sign Out
                     </button>
@@ -215,10 +256,22 @@ export default function Navbar() {
               </Link>
             )}
 
-            {!session && (
+            {!session ? (
               <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-5">
                 <i className="fa-brands fa-google mr-2"></i>
                 <span>Login or Register</span>
+              </button>
+            ) : (
+              <button
+                className="block px-4 py-2 text-sm text-gray-700"
+                role="menuitem"
+                tabIndex="-1"
+                id="user-menu-item-2"
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                Sign Out
               </button>
             )}
           </div>
