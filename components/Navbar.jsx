@@ -199,6 +199,7 @@ export default function Navbar() {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
+                      onClick={() => setIsProfileOpenMenu(false)}
                     >
                       Your Profile
                     </Link>
@@ -208,6 +209,7 @@ export default function Navbar() {
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
+                      onClick={() => setIsProfileOpenMenu(false)}
                     >
                       Saved Properties
                     </Link>

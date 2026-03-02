@@ -12,7 +12,7 @@ async function addProperty(formData) {
     throw new Error("User Id Is required");
   }
   const { userId } = sessionUser;
-  const amentities = formData.get("amenities");
+  const amenities = formData.getAll("amenities");
   const images = formData.getAll("images").filter((image) => image.name !== "");
   const propertyData = {
     owner: userId,
@@ -28,10 +28,11 @@ async function addProperty(formData) {
     beds: formData.get("beds"),
     baths: formData.get("baths"),
     square_feet: formData.get("square_feet"),
-    amenities: amentities,
+    amenities: amenities,
     rates: {
       weekly: formData.get("rates.weekly"),
       monthly: formData.get("rates.monthly"),
+      nightly: formData.get("rates.nightly"),
     },
     seller_info: {
       name: formData.get("seller_info.name"),

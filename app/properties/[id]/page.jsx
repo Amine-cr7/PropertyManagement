@@ -1,5 +1,7 @@
 import PropertyDetails from "@/components/PropertyDetails";
 import PropertyHeaderImage from "@/components/PropertyHeaderImage";
+import PropertyImages from "@/components/PropertyImages";
+import { convertToSerializableObject } from "@/config/convertToObject";
 import connectDB from "@/config/db";
 import Property from "@/models/Property";
 import Link from "next/link";
@@ -9,7 +11,12 @@ import { FaArrowLeft } from "react-icons/fa";
 export default async function PropertyDetailsPage({ params }) {
   const { id } = await params;
   await connectDB();
-  const property = await Property.findById(id).lean();
+  const propertyDoc = await Property.findById(id).lean();
+  const property = convertToSerializableObject(propertyDoc);
+  if(!property) {
+    return (<h1>Not Found</h1>)
+  }
+
   return (
     <>
       <PropertyHeaderImage image={property.images[0]} />
@@ -31,6 +38,7 @@ export default async function PropertyDetailsPage({ params }) {
           </div>
         </div>
       </section>
+      <PropertyImages images={property.images}/>
     </>
   );
 }
