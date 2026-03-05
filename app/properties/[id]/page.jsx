@@ -21,8 +21,8 @@ export default async function PropertyDetailsPage({ params }) {
   if (!property) {
     return <h1>Not Found</h1>;
   }
-  
-  const {userId} = await getSessionUser();
+
+  const { userId } = (await getSessionUser()) ?? {};
 
   let isBookmarked = false;
   if (userId) {
@@ -55,10 +55,10 @@ export default async function PropertyDetailsPage({ params }) {
                 isBookmarked={isBookmarked}
                 propertyId={property._id}
               />
-              <ShareButtons property={property}/>
+              <ShareButtons property={property} />
 
               {/* <!-- Contact Form --> */}
-              <PropertyContactForm />
+              <PropertyContactForm property={property} />
             </aside>
           </div>
         </div>
