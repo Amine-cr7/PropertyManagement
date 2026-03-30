@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PropertyPulse
 
-## Getting Started
+A full stack property rental listing app. Users can browse, post and bookmark properties, view them on a map, and message owners directly.
 
-First, run the development server:
+🌐 **Live:** [property-management-lilac.vercel.app](https://property-management-lilac.vercel.app)
+
+---
+
+## What I built
+
+Built this to practice Next.js App Router with server actions — no separate backend, everything talks to MongoDB directly through server actions.
+
+Users can:
+- Sign in with Google via NextAuth
+- Browse and search properties by location and type
+- View properties on an interactive map with amenities details
+- Bookmark properties to save for later
+- Message property owners directly
+- Add and manage their own listings with photo uploads
+- Share listings on social media
+
+---
+
+## Tech
+
+- **Next.js** (App Router + Server Actions)
+- **Tailwind CSS**
+- **MongoDB / Mongoose**
+- **NextAuth** — Google OAuth
+- **Cloudinary** — image uploads
+- **Leaflet / React Leaflet** — interactive maps
+- **react-photoswipe-gallery** — photo gallery
+- **react-share** — social sharing
+
+---
+
+## Run locally
 
 ```bash
+git clone https://github.com/amine-laouraidi/PropertyManagement.git
+cd PropertyManagement
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env.local` file:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_LOCATIONIQ_KEY=your_locationiq_key
+MONGODB_URI=your_mongodb_uri
+NEXT_PUBLIC_DOMAIN=http://localhost:3000
+NEXT_PUBLIC_API_DOMAIN=http://localhost:3000/api
+NEXTAUTH_SECRET=your_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL_INTERNAL=http://localhost:3000
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This is a portfolio project — still a work in progress. Feedback is welcome.
